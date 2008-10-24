@@ -1,0 +1,30 @@
+SemanticMenu
+============
+
+A plugin to make menus easier to write. Does not support nesting yet
+
+TODO:
+  -fix rdoc
+  -add nesting
+  -add css + task for copying it over
+
+Example
+=======
+
+<%= tabbed_menu do |root|
+  root.add "overview", root_path
+  root.add "comments", comments_path
+end %>
+
+Assuming you are on /comments, the output would be:
+
+<ul class="menu">
+  <li>
+    <a href="/">overview</a>
+  </li>
+  <li class="active">
+    <a href="/comments">comments</a>
+  </li>
+</ul>
+
+Copyright (c) 2008 Daniel Haran, released under the MIT license

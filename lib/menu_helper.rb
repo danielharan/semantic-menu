@@ -1,0 +1,21 @@
+# Use as so:
+# <%= tabbed_menu do |root|
+#   root.add "overview", root_path
+#   root.add "comments", comments_path
+# end %>
+#
+# Assuming you are on /comments, the output would be:
+#
+# <ul class="menu">
+#   <li>
+#     <a href="/">overview</a>
+#   </li>
+#   <li class="active">
+#     <a href="/comments">comments</a>
+#   </li>
+# </ul>
+module MenuHelper
+  def tabbed_menu(opts={}, &block)
+    SemanticMenu.new(@controller.request.request_uri, opts, &block).to_s
+  end
+end
