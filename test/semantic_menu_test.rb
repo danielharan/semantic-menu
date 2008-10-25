@@ -11,14 +11,17 @@ class SemanticMenuTest < ActiveSupport::TestCase
   end
   
   def test_menu_item_to_s
-    assert_equal MenuItem.new('title', 'link').to_s, '<li><a href="link">title</a></li>'
+    MenuItem.any_instance.stubs(:active?).returns(false)
+    assert_equal MenuItem.new("title", "link").to_s, '<li><a href="link">title</a></li>'
   end
   
   def test_menu_item_with_one_child
+    MenuItem.any_instance.stubs(:active?).returns(false)
     assert_equal '<ul class="mymenu"><li><a href="link">title</a></li></ul>', default_menu.to_s
   end
   
   def test_menu_item_with_two_children
+    MenuItem.any_instance.stubs(:active?).returns(false)
     menu = default_menu
     menu.add 'title2', 'link2'
     assert_equal '<ul class="mymenu"><li><a href="link">title</a></li>' +

@@ -6,8 +6,6 @@ class MenuItem
   include ActionView::Helpers::TagHelper,
           ActionView::Helpers::UrlHelper
   
-  cattr_accessor :current_page
-  
   def initialize(title, link)
     @title, @link = title, link
   end
@@ -18,25 +16,24 @@ class MenuItem
   end
   
   def active?
-    on_current_path?
+    current_page? @link
   end
   
-  # NB: not the same as current_page? which assumes options (rather than named route / string)
-  # also, this takes a path only, not a full url. In a menu, links are expected to be relative.
-  def on_current_path?
-    @link == CGI.escapeHTML(@@current_page)
+  cattr_accessor :controller
+  def controller # make it available to current_page? in UrlHelper
+    @@controller
   end
 end
 
 class SemanticMenu < MenuItem
   
   attr_accessor :children
-  def initialize(current_page, opts={},&block)
-    @@current_page  = current_page
+  def initialize(controller, opts={},&block)
+   @@controller  = controller
     
     @opts       = {:class => 'menu'}.merge opts
     @children   = []
-    yield self
+    yield self if block_given?
   end
 
   def to_s
@@ -45,5 +42,23 @@ class SemanticMenu < MenuItem
   
   def add(title, link)
     @children << MenuItem.new(title, link)
+  end
+end
+
+# Yep, monkey patch ActionView's UrlHelper
+# All that changes here is s/@controller/controller
+module ActionView
+  module Helpers #:nodoc:
+    module UrlHelper
+      def current_page?(options)
+        url_string = CGI.escapeHTML(url_for(options))
+        request = controller.request
+        if url_string =~ /^\w+:\/\//
+          url_string == "#{request.protocol}#{request.host_with_port}#{request.request_uri}"
+        else
+          url_string == request.request_uri
+        end
+      end
+    end
   end
 end

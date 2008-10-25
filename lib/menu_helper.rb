@@ -16,6 +16,6 @@
 # </ul>
 module MenuHelper
   def tabbed_menu(opts={}, &block)
-    SemanticMenu.new(@controller.request.request_uri, opts, &block).to_s
+    SemanticMenu.new(controller, opts, &block).to_s
   end
 end
