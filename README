@@ -1,6 +1,8 @@
 = SemanticMenu
 
-A plugin to make menus easier to write. Does not support nesting yet
+A plugin to make large menus easier to write.
+
+Supports arbitrarily deep nesting; parents will be marked as 'active' if any of its children are active.
 
 == Example
 

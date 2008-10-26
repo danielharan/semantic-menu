@@ -34,6 +34,25 @@ class SemanticMenuTest < ActiveSupport::TestCase
     assert_equal '<li class="active"><a href="link">title</a></li>', item.to_s
   end
   
+  def test_nested_menu
+    MenuItem.any_instance.stubs(:active?).returns(true)
+    menu = SemanticMenu.new(nil) do |root|
+      root.add 'level1', 'link_level1' do |link1|
+        link1.add 'level2', 'link_level2'
+      end
+    end
+    expected = <<NESTED
+<ul class="menu">
+  <li class="active"><a href="link_level1">level1</a>
+    <ul>
+      <li class="active"><a href="link_level2">level2</a></li>
+    </ul>
+  </li>
+</ul>
+NESTED
+    assert_equal expected.gsub(/\n */, '').gsub(/\n/, ''), menu.to_s
+  end
+  
   protected
     def default_menu
       SemanticMenu.new nil, :class => 'mymenu' do |root|

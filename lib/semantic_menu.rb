@@ -6,13 +6,25 @@ class MenuItem
   include ActionView::Helpers::TagHelper,
           ActionView::Helpers::UrlHelper
   
+  attr_accessor :children
+  
   def initialize(title, link)
-    @title, @link = title, link
+    @title, @link, @children = title, link, []
+  end
+  
+  def add(title, link, &block)
+    adding = MenuItem.new(title, link)
+    @children << adding
+    yield adding if block_given?
   end
   
   def to_s
     opts = active? ? {:class => 'active'} : {}
-    content_tag :li, link_to(@title, @link), opts
+    content_tag :li, link_to(@title, @link) + child_output, opts
+  end
+  
+  def child_output
+    children.empty? ? '' : content_tag(:ul, @children.collect(&:to_s).join)
   end
   
   def active?
@@ -27,7 +39,6 @@ end
 
 class SemanticMenu < MenuItem
   
-  attr_accessor :children
   def initialize(controller, opts={},&block)
    @@controller  = controller
     
@@ -38,10 +49,6 @@ class SemanticMenu < MenuItem
 
   def to_s
     content_tag(:ul, @children.collect(&:to_s).join, @opts)
-  end
-  
-  def add(title, link)
-    @children << MenuItem.new(title, link)
   end
 end
 
