@@ -6,16 +6,17 @@ class MenuItem
   include ActionView::Helpers::TagHelper,
           ActionView::Helpers::UrlHelper
   
-  attr_accessor :children
+  attr_accessor :children, :link
   
   def initialize(title, link)
     @title, @link, @children = title, link, []
   end
   
   def add(title, link, &block)
-    adding = MenuItem.new(title, link)
-    @children << adding
-    yield adding if block_given?
+    returning(MenuItem.new(title, link)) do |adding|
+      @children << adding
+      yield adding if block_given?
+    end
   end
   
   def to_s
@@ -28,7 +29,11 @@ class MenuItem
   end
   
   def active?
-    current_page? @link
+    children.any?(&:active?) || on_current_page?
+  end
+  
+  def on_current_page?
+    current_page?(@link)
   end
   
   cattr_accessor :controller

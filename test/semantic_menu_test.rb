@@ -53,6 +53,29 @@ NESTED
     assert_equal expected.gsub(/\n */, '').gsub(/\n/, ''), menu.to_s
   end
   
+  def test_parent_is_active_when_any_child_is
+    l1, l1_1, l1_2, l2, l2_1, l2_2 = [nil] * 6
+    menu = SemanticMenu.new(nil) do |root|
+      l1 = root.add 'level1.1', 'link_1.1' do |link1|
+        l1_1 = link1.add 'I-1', 'link_I-1'
+        l1_2 = link1.add 'I-2', 'link_I-2'
+      end
+      l2 = root.add 'level1.2', 'link_1.2' do |link2|
+        l2_1 = link2.add 'II-1', 'link_II-1'
+        l2_2 = link2.add 'II-2', 'link_II-2-active'
+      end
+    end
+    assert_equal 2, menu.children.size
+    [l1_1, l1_2].each {|active| active.stubs(:active?).returns(false) }
+    l1.stubs(:on_current_page?).returns(false)
+    assert ! l1.active?
+    
+    l2_1.stubs(:active?).returns(false)
+    l2_2.stubs(:active?).returns(true)
+    l2.stubs(:on_current_page?).returns(false)
+    assert l2.active?
+  end
+  
   protected
     def default_menu
       SemanticMenu.new nil, :class => 'mymenu' do |root|
