@@ -1,5 +1,5 @@
 # Use as so:
-# <%= tabbed_menu do |root|
+# <%= semantic_menu do |root|
 #   root.add "overview", root_path
 #   root.add "comments", comments_path
 # end %>
@@ -15,7 +15,7 @@
 #   </li>
 # </ul>
 module MenuHelper
-  def tabbed_menu(opts={}, &block)
+  def semantic_menu(opts={}, &block)
     SemanticMenu.new(controller, opts, &block).to_s
   end
 end

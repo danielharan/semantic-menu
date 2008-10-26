@@ -1,17 +1,10 @@
-SemanticMenu
-============
+= SemanticMenu
 
 A plugin to make menus easier to write. Does not support nesting yet
 
-TODO:
-  -fix rdoc
-  -add nesting
-  -add css + task for copying it over
+== Example
 
-Example
-=======
-
-<%= tabbed_menu do |root|
+<%= semantic_menu do |root|
   root.add "overview", root_path
   root.add "comments", comments_path
 end %>
