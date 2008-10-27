@@ -48,6 +48,7 @@ class SemanticMenu < MenuItem
    @@controller  = controller
     
     @opts       = {:class => 'menu'}.merge opts
+    @opts[:class] = @opts[:class] + ' menu_level_1' unless @opts[:class].split(' ').include?('menu1')
     @children   = []
     yield self if block_given?
   end
