@@ -8,20 +8,30 @@ class MenuItem
   
   attr_accessor :children, :link
   
-  def initialize(title, link)
-    @title, @link, @children = title, link, []
+  def initialize(title, link, level)
+    @title, @link, @level, @children = title, link, level, []
   end
   
   def add(title, link, &block)
-    returning(MenuItem.new(title, link)) do |adding|
+    returning(MenuItem.new(title, link, @level +1)) do |adding|
       @children << adding
       yield adding if block_given?
     end
   end
   
   def to_s
-    opts = active? ? {:class => 'active'} : {}
+    opts = add_level_class({:class => (active? ? 'active' : '')})
     content_tag :li, link_to(@title, @link) + child_output, opts
+  end
+  
+  def add_level_class(opts)
+    level_class = "menu_level_#{@level}"
+    if opts[:class].blank?
+      opts[:class] = level_class
+    else
+      opts[:class] += ' ' + level_class
+    end
+    opts
   end
   
   def child_output
@@ -45,11 +55,11 @@ end
 class SemanticMenu < MenuItem
   
   def initialize(controller, opts={},&block)
-   @@controller  = controller
-    
+   @@controller = controller
     @opts       = {:class => 'menu'}.merge opts
-    @opts[:class] = @opts[:class] + ' menu_level_1' unless @opts[:class].split(' ').include?('menu1')
+    @level      = 0
     @children   = []
+    
     yield self if block_given?
   end
 

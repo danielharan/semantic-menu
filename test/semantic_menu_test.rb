@@ -7,32 +7,34 @@ require 'semantic_menu'
 
 class SemanticMenuTest < ActiveSupport::TestCase
   def test_menu_to_s
-    assert_equal SemanticMenu.new(nil) {}.to_s, '<ul class="menu menu_level_1"></ul>'
+    assert_equal SemanticMenu.new(nil) {}.to_s, '<ul class="menu"></ul>'
   end
   
   def test_menu_item_to_s
     MenuItem.any_instance.stubs(:active?).returns(false)
-    assert_equal MenuItem.new("title", "link").to_s, '<li><a href="link">title</a></li>'
+    assert_equal '<li class="menu_level_2"><a href="link">title</a></li>',
+                 MenuItem.new("title", "link", 2).to_s
+                 
   end
   
   def test_menu_item_with_one_child
     MenuItem.any_instance.stubs(:active?).returns(false)
-    assert_equal '<ul class="mymenu menu_level_1"><li><a href="link">title</a></li></ul>', default_menu.to_s
+    assert_equal '<ul class="mymenu"><li class="menu_level_1"><a href="link">title</a></li></ul>', default_menu.to_s
   end
   
   def test_menu_item_with_two_children
     MenuItem.any_instance.stubs(:active?).returns(false)
     menu = default_menu
     menu.add 'title2', 'link2'
-    assert_equal '<ul class="mymenu menu_level_1">' + 
-                    '<li><a href="link">title</a></li>' +
-                    '<li><a href="link2">title2</a></li></ul>', menu.to_s
+    assert_equal '<ul class="mymenu">' + 
+                    '<li class="menu_level_1"><a href="link">title</a></li>' +
+                    '<li class="menu_level_1"><a href="link2">title2</a></li></ul>', menu.to_s
   end
   
   def test_menu_item_shows_active_if_on_current_page
-    item = MenuItem.new("title", "link")
+    item = MenuItem.new("title", "link", 2)
     item.stubs(:active?).returns(true)
-    assert_equal '<li class="active"><a href="link">title</a></li>', item.to_s
+    assert_equal '<li class="active menu_level_2"><a href="link">title</a></li>', item.to_s
   end
   
   def test_nested_menu
@@ -43,10 +45,10 @@ class SemanticMenuTest < ActiveSupport::TestCase
       end
     end
     expected = <<NESTED
-<ul class="menu menu_level_1">
-  <li class="active"><a href="link_level1">level1</a>
+<ul class="menu">
+  <li class="active menu_level_1"><a href="link_level1">level1</a>
     <ul>
-      <li class="active"><a href="link_level2">level2</a></li>
+      <li class="active menu_level_2"><a href="link_level2">level2</a></li>
     </ul>
   </li>
 </ul>
