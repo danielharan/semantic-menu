@@ -14,11 +14,40 @@ end %>
 Assuming you are on /comments, the output would be:
 
 <ul class="menu">
-  <li>
+  <li class="menu_level_1">
     <a href="/">overview</a>
   </li>
-  <li class="active">
+  <li class="active menu_level_1">
     <a href="/comments">comments</a>
+  </li>
+</ul>
+
+You can nest the menu as deeply as you want:
+
+<%= semantic_menu do |root|
+  root.add "overview", root_path
+  root.add "comments", comments_path do |comments|
+    comments.add "My Comments", comments_path(:author => current_user)
+    comments.add "Recent",      recent_comments_path
+  end
+end %>
+
+This would look like this:
+
+<ul class="menu">
+  <li class="menu_level_1">
+    <a href="root_path">overview</a>
+  </li>
+  <li class="active menu_level_1">
+    <a href="comments_path">comments</a>
+    <ul>
+      <li class="active menu_level_2">
+        <a href="my_comments_path">My Comments</a>
+      </li>
+      <li class="menu_level_2">
+        <a href="recent_comments_path">Recent</a>
+      </li>
+    </ul>
   </li>
 </ul>
 
