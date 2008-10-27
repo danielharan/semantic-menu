@@ -25,10 +25,10 @@ Assuming you are on /comments, the output would be:
 You can nest the menu as deeply as you want:
 
 <%= semantic_menu do |root|
-  root.add "overview", root_path
-  root.add "comments", comments_path do |comments|
-    comments.add "My Comments", comments_path(:author => current_user)
-    comments.add "Recent",      recent_comments_path
+  root.add "overview", "root_path"
+  root.add "comments", "comments_path" do |comments|
+    comments.add "My Comments", "my_comments_path"
+    comments.add "Recent",      "recent_comments_path"
   end
 end %>
 
