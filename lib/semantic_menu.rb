@@ -20,22 +20,15 @@ class MenuItem
   end
   
   def to_s
-    opts = add_level_class({:class => (active? ? 'active' : '')})
-    content_tag :li, link_to(@title, @link) + child_output, opts
+    content_tag :li, link_to(@title, @link) + child_output, ({:class => 'active'} if active?)
   end
   
-  def add_level_class(opts)
-    level_class = "menu_level_#{@level}"
-    if opts[:class].blank?
-      opts[:class] = level_class
-    else
-      opts[:class] += ' ' + level_class
-    end
-    opts
+  def level_class
+    "menu_level_#{@level}"
   end
   
   def child_output
-    children.empty? ? '' : content_tag(:ul, @children.collect(&:to_s).join)
+    children.empty? ? '' : content_tag(:ul, @children.collect(&:to_s).join, :class => level_class)
   end
   
   def active?
