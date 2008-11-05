@@ -17,6 +17,12 @@ class SemanticMenuTest < ActiveSupport::TestCase
                  
   end
   
+  def test_menu_item_passes_options_to_link
+    MenuItem.any_instance.stubs(:active?).returns(false)
+    assert_equal '<li><a href="link" class="button">title</a></li>',
+                 MenuItem.new("title", "link", 2, :class => 'button').to_s
+  end
+  
   def test_menu_item_with_one_child
     MenuItem.any_instance.stubs(:active?).returns(false)
     assert_equal '<ul class="mymenu"><li><a href="link">title</a></li></ul>', default_menu.to_s
@@ -72,10 +78,11 @@ NESTED
   
   #def test_example_output_for_developer_laziness
   #  MenuItem.any_instance.stubs(:active?).returns(false)
-  #  menu = SemanticMenu.new(nil) do |root|
+  #  menu = SemanticMenu.new(nil, :class => 'top_level_nav') do |root|
   #    root.add "overview", "root_path"
-  #    root.add "comments", "comments_path" do |comments|
-  #      comments.add "My Comments", "my_comments_path"
+  #    root.add "comments", "comments_path", :class => 'button' do |comments|
+  #      comment_item = comments.add "My Comments", "my_comments_path"
+  #      comment_item.stubs(:active?).returns(true)
   #      comments.add "Recent",      "recent_comments_path"
   #    end
   #  end

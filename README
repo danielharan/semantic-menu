@@ -22,11 +22,11 @@ Assuming you are on /comments, the output would be:
   </li>
 </ul>
 
-You can nest the menu as deeply as you want:
+add and semantic_menu both take an optional parameter hash, and you can nest the menu as deeply as you want:
 
-<%= semantic_menu do |root|
+<%= semantic_menu :class => 'top_level_nav' do |root|
   root.add "overview", "root_path"
-  root.add "comments", "comments_path" do |comments|
+  root.add "comments", "comments_path", :class => 'button' do |comments|
     comments.add "My Comments", "my_comments_path"
     comments.add "Recent",      "recent_comments_path"
   end
@@ -34,12 +34,12 @@ end %>
 
 This would look like this:
 
-<ul class="menu">
+<ul class="top_level_nav">
   <li>
     <a href="root_path">overview</a>
   </li>
-  <li class="active">
-    <a href="comments_path">comments</a>
+  <li>
+    <a href="comments_path" class="button">comments</a>
     <ul class="menu_level_1">
       <li class="active">
         <a href="my_comments_path">My Comments</a>
@@ -50,6 +50,5 @@ This would look like this:
     </ul>
   </li>
 </ul>
-
 
 Copyright (c) 2008 Daniel Haran, released under the MIT license

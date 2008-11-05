@@ -8,19 +8,20 @@ class MenuItem
   
   attr_accessor :children, :link
   
-  def initialize(title, link, level)
-    @title, @link, @level, @children = title, link, level, []
+  def initialize(title, link, level, link_opts={})
+    @title, @link, @level, @link_opts = title, link, level, link_opts
+    @children = []
   end
   
-  def add(title, link, &block)
-    returning(MenuItem.new(title, link, @level +1)) do |adding|
+  def add(title, link, link_opts={}, &block)
+    returning(MenuItem.new(title, link, @level +1, link_opts)) do |adding|
       @children << adding
       yield adding if block_given?
     end
   end
   
   def to_s
-    content_tag :li, link_to(@title, @link) + child_output, ({:class => 'active'} if active?)
+    content_tag :li, link_to(@title, @link, @link_opts) + child_output, ({:class => 'active'} if active?)
   end
   
   def level_class
