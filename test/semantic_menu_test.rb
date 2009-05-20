@@ -76,18 +76,19 @@ NESTED
     assert l1.active?
   end
   
-  #def test_example_output_for_developer_laziness
+  # def test_example_output_for_developer_laziness
   #  MenuItem.any_instance.stubs(:active?).returns(false)
   #  menu = SemanticMenu.new(nil, :class => 'top_level_nav') do |root|
   #    root.add "overview", "root_path"
   #    root.add "comments", "comments_path", :class => 'button' do |comments|
+  #      comments.stubs(:active?).returns(true)
   #      comment_item = comments.add "My Comments", "my_comments_path"
   #      comment_item.stubs(:active?).returns(true)
   #      comments.add "Recent",      "recent_comments_path"
   #    end
   #  end
   #  puts menu
-  #end
+  # end
   
   protected
     def default_menu

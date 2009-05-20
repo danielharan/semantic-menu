@@ -38,7 +38,7 @@ This would look like this:
   <li>
     <a href="root_path">overview</a>
   </li>
-  <li>
+  <li class="active">
     <a href="comments_path" class="button">comments</a>
     <ul class="menu_level_1">
       <li class="active">
