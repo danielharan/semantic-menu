@@ -1,0 +1,13 @@
+ul.top_level_nav { height: 30px; display: inline-block; background: #404040; padding: 10px 0 0; margin: 0 0 40px; position: relative; }
+ul.top_level_nav:after{ content: "."; display: block; clear: both; visibility: hidden; line-height: 0; height: 0; }
+html[xmlns] ul.top_level_nav{ display: block; }
+* html ul.top_level_nav{ height: 1%; }
+ul.top_level_nav * { zoom: 1; }
+ul.top_level_nav li { display: block; margin: 0 0 0 10px; padding: 0; float: left; list-style: none; height: 30px; }
+ul.top_level_nav li a { display: block; float: left; line-height: 30px; height: 30px; padding: 0 15px; background: #606060; color: #FFFFFF; }
+ul.top_level_nav li a:hover,
+ul.top_level_nav li.active a { background: #808080; }
+ul.top_level_nav li ul.menu_level_1 { width: 100%; height: 30px; position: absolute; left: 0; top: 100%; background: #808080; padding: 10px 0 0; margin: 0; }
+ul.top_level_nav li ul.menu_level_1 li a { background: #C0C0C0; color: #000000; }
+ul.top_level_nav li ul.menu_level_1 li a:hover,
+ul.top_level_nav li ul.menu_level_1 li.active a { background: #FFFFFF; }
