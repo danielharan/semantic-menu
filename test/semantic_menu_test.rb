@@ -4,6 +4,7 @@ require 'active_support'
 require 'active_support/test_case'
 require 'action_controller' # grr, action_view now breaks without it
 require 'semantic_menu'
+require 'mocha'
 
 class SemanticMenuTest < ActiveSupport::TestCase
   def test_menu_to_s

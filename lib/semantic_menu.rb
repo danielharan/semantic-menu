@@ -68,12 +68,20 @@ module ActionView
   module Helpers #:nodoc:
     module UrlHelper
       def current_page?(options)
-        url_string = CGI.escapeHTML(url_for(options))
+        url_string = CGI.unescapeHTML(url_for(options))
         request = controller.request
-        if url_string =~ /^\w+:\/\//
-          url_string == "#{request.protocol}#{request.host_with_port}#{request.request_uri}"
+        # We ignore any extra parameters in the request_uri if the 
+        # submitted url doesn't have any either.  This lets the function
+        # work with things like ?order=asc 
+        if url_string.index("?")
+          request_uri = request.request_uri
         else
-          url_string == request.request_uri
+          request_uri = request.request_uri.split('?').first
+        end
+        if url_string =~ /^\w+:\/\//
+          url_string == "#{request.protocol}#{request.host_with_port}#{request_uri}"
+        else
+          url_string == request_uri
         end
       end
     end
