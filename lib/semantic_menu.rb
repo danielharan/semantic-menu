@@ -37,12 +37,8 @@ class MenuItem
   end
   
   def on_current_page?
+    @controller = @@controller # set it for current_page? defined in UrlHelper
     current_page?(@link)
-  end
-  
-  cattr_accessor :controller
-  def controller # make it available to current_page? in UrlHelper
-    @@controller
   end
 end
 
@@ -59,31 +55,5 @@ class SemanticMenu < MenuItem
 
   def to_s
     content_tag(:ul, @children.collect(&:to_s).join, @opts)
-  end
-end
-
-# Yep, monkey patch ActionView's UrlHelper
-# All that changes here is s/@controller/controller
-module ActionView
-  module Helpers #:nodoc:
-    module UrlHelper
-      def current_page?(options)
-        url_string = CGI.unescapeHTML(url_for(options))
-        request = controller.request
-        # We ignore any extra parameters in the request_uri if the 
-        # submitted url doesn't have any either.  This lets the function
-        # work with things like ?order=asc 
-        if url_string.index("?")
-          request_uri = request.request_uri
-        else
-          request_uri = request.request_uri.split('?').first
-        end
-        if url_string =~ /^\w+:\/\//
-          url_string == "#{request.protocol}#{request.host_with_port}#{request_uri}"
-        else
-          url_string == request_uri
-        end
-      end
-    end
   end
 end
