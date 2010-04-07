@@ -8,7 +8,7 @@ require 'mocha'
 
 class SemanticMenuTest < ActiveSupport::TestCase
   def test_menu_to_s
-    assert_equal SemanticMenu.new(nil) {}.to_s, '<ul class="menu"></ul>'
+    assert_equal SemanticMenu.new {}.to_s, '<ul class="menu"></ul>'
   end
   
   def test_menu_item_to_s
@@ -46,7 +46,7 @@ class SemanticMenuTest < ActiveSupport::TestCase
   
   def test_nested_menu
     MenuItem.any_instance.stubs(:active?).returns(true)
-    menu = SemanticMenu.new(nil) do |root|
+    menu = SemanticMenu.new do |root|
       root.add 'top_level', 'some_page_path' do |link1|
         link1.add 'first_child', 'lower_page_path'
       end
@@ -60,12 +60,12 @@ class SemanticMenuTest < ActiveSupport::TestCase
   </li>
 </ul>
 NESTED
-    assert_equal expected.gsub(/\n */, '').gsub(/\n/, ''), menu.to_s
+    assert_equal expected.gsub(/\n */, '').gsub(/\n/, ''), menu.to_s(nil)
   end
   
   def test_parent_is_active_when_any_child_is
     l1, l1_1, l1_2 = [nil] * 3
-    menu = SemanticMenu.new(nil) do |root|
+    menu = SemanticMenu.new do |root|
       l1 = root.add 'level1.1', 'link_1.1' do |link1|
         l1_1 = link1.add 'I-1', 'link_I-1'
         l1_2 = link1.add 'I-2', 'link_I-2-active'
@@ -93,7 +93,7 @@ NESTED
   
   protected
     def default_menu
-      SemanticMenu.new nil, :class => 'mymenu' do |root|
+      SemanticMenu.new :class => 'mymenu' do |root|
         root.add 'title', 'link'
       end
     end

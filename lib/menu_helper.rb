@@ -16,6 +16,6 @@
 # </ul>
 module MenuHelper
   def semantic_menu(opts={}, &block)
-    SemanticMenu.new(controller, opts, &block).to_s
+    SemanticMenu.new(opts, &block).to_s(controller)
   end
 end

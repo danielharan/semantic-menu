@@ -20,7 +20,8 @@ class MenuItem
     end
   end
   
-  def to_s
+  def to_s(controller=nil)
+    @controller = controller
     content_tag :li, link_to(@title, @link, @link_opts) + child_output, ({:class => 'active'} if active?)
   end
   
@@ -37,15 +38,13 @@ class MenuItem
   end
   
   def on_current_page?
-    @controller = @@controller # set it for current_page? defined in UrlHelper
-    current_page?(@link)
+    @controller && current_page?(@link)
   end
 end
 
 class SemanticMenu < MenuItem
   
-  def initialize(controller, opts={},&block)
-   @@controller = controller
+  def initialize(opts={},&block)
     @opts       = {:class => 'menu'}.merge opts
     @level      = 0
     @children   = []
@@ -53,7 +52,8 @@ class SemanticMenu < MenuItem
     yield self if block_given?
   end
 
-  def to_s
+  def to_s(controller=nil)
+    @controller = controller
     content_tag(:ul, @children.collect(&:to_s).join, @opts)
   end
 end
