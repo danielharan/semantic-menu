@@ -54,6 +54,6 @@ class SemanticMenu < MenuItem
 
   def to_s(controller=nil)
     @controller = controller
-    content_tag(:ul, @children.collect(&:to_s).join, @opts)
+    content_tag(:ul, @children.collect{ |child| child.to_s(@controller) }.join, @opts)
   end
 end
