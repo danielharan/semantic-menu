@@ -7,6 +7,7 @@ class MenuItem
           ActionView::Helpers::UrlHelper
   
   attr_accessor :children, :link
+  cattr_accessor :controller
   
   def initialize(title, link, level, link_opts={})
     @title, @link, @level, @link_opts = title, link, level, link_opts
