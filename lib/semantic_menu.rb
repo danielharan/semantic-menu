@@ -15,7 +15,7 @@ class MenuItem
   end
   
   def add(title, link, link_opts={}, &block)
-    returning(MenuItem.new(title, link, @level +1, link_opts)) do |adding|
+    MenuItem.new(title, link, @level +1, link_opts).tap do |adding|
       @children << adding
       yield adding if block_given?
     end
