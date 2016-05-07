@@ -24,6 +24,18 @@ class SemanticMenuTest < ActiveSupport::TestCase
                  MenuItem.new("title", "link", 2, :class => 'button').to_s
   end
   
+  def test_force_active_state
+    MenuItem.any_instance.stubs(:on_current_page?).returns(false)
+
+    menu = SemanticMenu.new nil, :class => 'mymenu' do |root|
+      root.add 'title', 'link' do |links|
+        links.active = true
+      end
+    end
+    
+    assert_equal '<ul class="mymenu"><li class="active"><a href="link">title</a></li></ul>', menu.to_s
+  end
+  
   def test_menu_item_with_one_child
     MenuItem.any_instance.stubs(:active?).returns(false)
     assert_equal '<ul class="mymenu"><li><a href="link">title</a></li></ul>', default_menu.to_s
